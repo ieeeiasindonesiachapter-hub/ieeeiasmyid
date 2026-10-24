@@ -1,0 +1,61 @@
+name: New or updated article
+description: Publish an article on the website (editors only - issues from anyone else are ignored).
+title: "Article: "
+labels: ["article"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Fill in the form and press **Submit new issue**. The article is published automatically within a few minutes.
+        Only people with write access to this repository can publish; issues from others are ignored.
+  - type: input
+    id: title
+    attributes:
+      label: Title
+    validations:
+      required: true
+  - type: dropdown
+    id: category
+    attributes:
+      label: Category
+      options: [Activities, Events, News]
+    validations:
+      required: true
+  - type: input
+    id: date
+    attributes:
+      label: Date (YYYY-MM-DD)
+      description: Leave empty for today.
+  - type: input
+    id: author
+    attributes:
+      label: Author
+      description: Leave empty for "Administrator".
+  - type: textarea
+    id: cover
+    attributes:
+      label: Cover image
+      description: Drag and drop ONE image here. It is shown at the top of the article and on the cards.
+  - type: textarea
+    id: body
+    attributes:
+      label: Article text
+      description: Paste your text. Markdown works (## heading, **bold**, - list). Drag and drop more images into the text where they should appear.
+    validations:
+      required: true
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary (home banner only)
+      description: One or two sentences, only used if this article is the home banner.
+  - type: checkboxes
+    id: options
+    attributes:
+      label: Options
+      options:
+        - label: Show this article as the big home-page banner
+  - type: input
+    id: slug
+    attributes:
+      label: Existing article address (only to UPDATE an article)
+      description: The last part of its web address, e.g. ieee-industry-applications-society-indonesia-chapter-is-officially-formed. Leave empty for a new article. When updating, empty fields keep their old value.

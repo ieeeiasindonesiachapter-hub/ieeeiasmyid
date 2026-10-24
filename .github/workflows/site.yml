@@ -1,0 +1,76 @@
+name: Site
+
+on:
+  push:
+    branches: [main]
+  issues:
+    types: [opened]
+  workflow_dispatch:
+
+concurrency:
+  group: site
+  cancel-in-progress: false
+
+jobs:
+  article:
+    # Issue forms only; the script itself checks the author has write access.
+    if: github.event_name == 'issues' && (contains(github.event.issue.labels.*.name, 'article') || contains(github.event.issue.labels.*.name, 'article-delete'))
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: pip install markdown
+      - name: Build article from issue
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RESULT_FILE: ${{ runner.temp }}/result.json
+        run: python .github/scripts/issue_to_article.py
+      - name: Commit and report
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RESULT_FILE: ${{ runner.temp }}/result.json
+          ISSUE: ${{ github.event.issue.number }}
+          ACTOR: ${{ github.event.issue.user.login }}
+        run: |
+          ok=$(python -c "import json,os;print(json.load(open(os.environ['RESULT_FILE']))['ok'])")
+          python -c "import json,os;print(json.load(open(os.environ['RESULT_FILE']))['message'])" > "$RUNNER_TEMP/msg.txt"
+          if [ "$ok" = "True" ]; then
+            git config user.name "$ACTOR"
+            git config user.email "$ACTOR@users.noreply.github.com"
+            git add -A
+            git diff --cached --quiet || git commit -m "Article via issue #$ISSUE"
+            git pull --rebase origin main
+            git push origin HEAD:main
+            gh issue comment "$ISSUE" --body-file "$RUNNER_TEMP/msg.txt"
+            gh issue close "$ISSUE"
+          else
+            gh issue comment "$ISSUE" --body "Could not publish: $(cat "$RUNNER_TEMP/msg.txt")"
+            gh issue close "$ISSUE" --reason "not planned"
+          fi
+
+  deploy:
+    # Runs after every push to main, and after the article job (a push made with GITHUB_TOKEN does not start a new run).
+    needs: [article]
+    if: always() && (github.event_name != 'issues' || needs.article.result == 'success')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+        with: { ref: main }
+      - name: Keep only what the site needs
+        run: rm -rf .git .github .venv _source
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with: { path: . }
+      - id: deployment
+        uses: actions/deploy-pages@v4

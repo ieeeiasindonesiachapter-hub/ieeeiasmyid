@@ -1,0 +1,164 @@
+/* Additions on top of the copied theme stylesheet (styles.css). */
+
+/* Cards and hero without an uploaded image use the default artwork */
+.no-image {
+    background: #005a8c url('../images/hero-default.svg') center / cover no-repeat;
+}
+.slide.no-image { background-size: cover; background-position: center; }
+/* Vary the crop of the default artwork from card to card */
+.posts ul.tiled li:nth-child(3n+1) .no-image { background-position: 15% 50%; }
+.posts ul.tiled li:nth-child(3n+2) .no-image { background-position: 55% 50%; }
+.posts ul.tiled li:nth-child(3n) .no-image { background-position: 90% 50%; }
+.posts ul.tiled li { margin-bottom: 30px; }
+.article-image { margin: 20px 0; }
+.empty { padding: 40px 0; text-align: center; color: #666; }
+.home-articles { padding-bottom: 40px; }
+
+/* Flash message and footer logout button */
+.alert { margin-top: 20px; }
+form.logout-form { display: inline; margin: 0; }
+form.logout-form button {
+    background: none; border: 0; padding: 0; color: inherit; font: inherit; cursor: pointer;
+}
+form.logout-form button:hover { text-decoration: underline; }
+form.inline-form { display: inline; }
+
+/* Admin screens */
+.admin { padding-bottom: 40px; }
+.admin-toolbar { margin-bottom: 20px; }
+.admin .table td { vertical-align: middle; }
+.nowrap { white-space: nowrap; }
+.admin label { font-weight: 700; }
+/* The theme's "#page .btn" rule forces a transparent background, which leaves Bootstrap's white danger text invisible. */
+#page .btn.btn-danger { color: #fff !important; background: #c9302c !important; border: 1px solid #ac2925 !important; }
+#page .btn.btn-danger:hover, #page .btn.btn-danger:focus { background: #ac2925 !important; }
+
+/* Images inside article bodies */
+.post-content img { max-width: 100%; height: auto; }
+.body-image { margin-bottom: 10px; }
+.body-image img { max-height: 80px; margin-right: 10px; }
+
+/* Text meant only for screen readers (from the theme's style.css, which is not copied over). */
+.screen-reader-text {
+    clip: rect(1px, 1px, 1px, 1px);
+    position: absolute !important;
+    white-space: nowrap;
+    height: 1px;
+    width: 1px;
+    overflow: hidden;
+}
+.screen-reader-text:focus {
+    background-color: #f1f1f1;
+    border-radius: 3px;
+    box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.6);
+    clip: auto !important;
+    color: #21759b;
+    display: block;
+    font-size: 0.875rem;
+    font-weight: bold;
+    height: auto;
+    left: 5px;
+    line-height: normal;
+    padding: 15px 23px 14px;
+    text-decoration: none;
+    top: 5px;
+    width: auto;
+    z-index: 100000;
+}
+
+/* Header: keep the site title, search icon and IEEE logo on one centre line.
+   The theme offsets the search block by 20px and gives the title a bottom margin,
+   which was built around its taller header image. */
+@media (min-width: 992px) {
+    header#header #logo-search #logo h1 { margin-bottom: 0; }
+    header#header #logo-search #search .row.search-block { top: 0; }
+}
+/* IEEE IAS logo followed by the chapter name.
+   Logo guidelines: keep at least 85px wide on screen, keep clear space around it, use the colour SVG unaltered. */
+header#header #logo-search #logo {
+    display: flex;
+    align-items: center;
+}
+header#header #logo-search #logo a.site-logo {
+    display: flex;
+    align-items: center;
+    height: auto;
+}
+header#header #logo-search #logo a.site-logo img {
+    float: none;
+    padding: 0;
+    margin: 0 22px 0 0;
+    width: 270px;
+    height: auto;
+    max-width: none;
+    flex: none;
+}
+header#header #logo-search #logo a.site-logo h1 {
+    margin: 0;
+    padding-left: 22px;
+    border-left: 1px solid rgba(0, 102, 153, .3);
+    font-size: 34px;
+    line-height: 38px;
+}
+@media (max-width: 1199px) {
+    header#header #logo-search #logo a.site-logo img { width: 225px; margin-right: 16px; }
+    header#header #logo-search #logo a.site-logo h1 { padding-left: 16px; font-size: 26px; line-height: 30px; }
+}
+@media (max-width: 991px) {
+    header#header #logo-search #logo {
+        justify-content: center;
+        height: 64px;
+    }
+    header#header #logo-search #logo a.site-logo { display: flex; }
+    header#header #logo-search #logo a.site-logo img { width: 124px; margin-right: 10px; }
+    header#header #logo-search #logo a.site-logo h1 { padding-left: 10px; font-size: 15px; line-height: 17px; }
+}
+
+/* Footer: links on the left, Instagram on the right, all on one centre line. */
+footer#colophon { padding: 34px 0; }
+footer#colophon .footer-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px 24px;
+}
+footer#colophon ul#menu-footer-navigation { margin: 0; }
+footer#colophon #social-links { margin: 0; text-align: right; }
+footer#colophon #social-links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    width: auto;
+    height: auto;
+    margin: 0;
+    font-size: 13px;
+    line-height: 20px;
+}
+/* Icon and text react together: the theme's dark-grey icon hover is replaced by one shared effect. */
+footer#colophon #social-links a { transition: opacity .15s; }
+footer#colophon #social-links a i,
+footer#colophon #social-links a:hover i { color: #fff; }
+footer#colophon #social-links a:hover,
+footer#colophon #social-links a:focus { opacity: .75; text-decoration: none; }
+
+/* Narrow screens: "Follow Us on Instagram:" gets its own line above the icon and address. */
+@media (max-width: 480px) {
+    footer#colophon #social-links { text-align: left; }
+    footer#colophon #social-links a { flex-wrap: wrap; row-gap: 6px; }
+    footer#colophon #social-links a span:first-child { flex-basis: 100%; }
+    footer#colophon #social-links a span:last-child { overflow-wrap: anywhere; }
+}
+
+/* Footer link colours in every state. The theme sets normal/hover/focus/active but not :visited,
+   so its "#page a:visited" rule painted visited links the same blue as the footer background. */
+footer#colophon a,
+footer#colophon a:visited,
+footer#colophon a:hover,
+footer#colophon a:focus,
+footer#colophon a:active,
+footer#colophon #social-links a span,
+footer#colophon #social-links a i { color: #fff !important; }
+
+/* Home banner picture chosen in the manager */
+.slide { background-size: cover; background-position: center; background-repeat: no-repeat; }

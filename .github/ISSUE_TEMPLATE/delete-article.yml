@@ -1,0 +1,12 @@
+name: Delete an article
+description: Remove an article from the website (editors only).
+title: "Delete: "
+labels: ["article-delete"]
+body:
+  - type: input
+    id: slug
+    attributes:
+      label: Article address
+      description: The last part of the article's web address, e.g. webinar-on-iot-and-ai-innovation-in-healthcare-and-aquaculture-draws-70-participants
+    validations:
+      required: true
